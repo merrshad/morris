@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nine Men's Morris | نُه‌مرد موریس</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand navbar-brand-centered" href="index.html">نُه‌ مرد موریس</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">بازی</a></li>
+          <li class="nav-item"><a class="nav-link" href="rules.html">قوانین</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">درباره ما</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <button class="btn border-dark border-3 btn-lg" id="settingsModalBtn" type="button" style="position: fixed; top: 80px; right: 20px; z-index: 1050;">
+    <span class="fw-bold">⚙️</span>
+  </button>
+
+  <div class="container mt-3 mb-3 py-md-4">
+    <header class="text-center mb-4">
+      
+    </header>
+
+    <div class="row">
+        
+        <div class="col-12">
+            <div class="scoreboard card shadow-sm mb-3">
+              <div class="card-body text-center">
+                <h5 class="card-title">امتیازات</h5>
+                <p class="card-text fs-4">
+                  <span id="score1" class="badge">0</span> <span id="player1Name">بازیکن ۱</span> |
+                  <span id="player2Name">بازیکن ۲</span> <span id="score2" class="badge">0</span>
+                </p>
+                <p id="turnInfo" class="mt-2 fw-bold">برای شروع، تنظیمات را انجام داده و دکمه "شروع بازی" را بزنید.</p>
+                <p id="drawCounterInfo" class="mt-1 small text-muted" style="display: none;"></p>
+                <p id="roundInfoDisplay" class="mt-1 small text-primary fw-bold" style="display: none;"></p>
+              </div>
+            </div>
+            
+            <div class="alert alert-info" role="alert" id="gameMessage" style="display: none;"></div>
+        
+            <div id="gameAreaWrapper" class="d-flex flex-column flex-md-row justify-content-center align-items-center align-items-md-start mb-3">
+                <div id="player0CapturedDisplay" class="captured-piece-display me-2"></div>
+                <div id="player0Reserve" class="piece-reserve me-3 ms-5"></div>
+                <div id="gameBoardContainer" class="text-center">
+                  <div id="gameBoard" class="mx-auto shadow"></div>
+                </div>
+                <div id="player1Reserve" class="piece-reserve ms-3 me-5"></div>
+                <div id="player1CapturedDisplay" class="captured-piece-display ms-2"></div>
+            </div>
+        
+            <div class="text-center mb-3">
+                <button id="startGameUserBtn" class="btn btn-primary me-2 my-1">شروع بازی</button>
+                <button id="openResetModalBtn" class="btn btn-warning my-1" data-bs-toggle="modal" data-bs-target="#resetOptionsModal">ریست / شروع مجدد</button>
+                <button id="openHistoryModalBtn" class="btn btn-info my-1 ms-2" data-bs-toggle="modal" data-bs-target="#moveHistoryModal">تاریخچه حرکات</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center mt-4 mb-3">
+      <p class="text-muted small">انجمن علمی رباتیک و هوش مصنوعی دانشگاه دامغان</p>
+    </footer>
+  </div>
+
+  <div class="modal fade" id="winnerModal" tabindex="-1" aria-labelledby="winnerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"> <div class="modal-content"> <div class="modal-header"><h5 class="modal-title text-center" id="winnerModalLabel" > <button type="button" class="btn-close" data-bs-dismiss="modal"></button>پایان بازی!</اh5></button></div> <div class="modal-body text-center"><p id="winnerText" class="fs-4"></p></div> <div class="modal-footer"><button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="startNewRoundBtn">دور جدید</button></div> </div> </div>
+  </div>
+
+  <div class="modal fade" id="gameSettingsModal" tabindex="-1" aria-labelledby="gameSettingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="gameSettingsModalLabel">تنظیمات بازی</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="p-3 border rounded bg-light mb-3 shadow-sm">
+              <h5 class="mb-3">تنظیمات عمومی بازی</h5>
+              <div class="mb-3">
+                  <label for="gameMode" class="form-label">حالت بازی:</label>
+                  <select id="gameMode" class="form-select form-select-sm">
+                    <option value="human">انسان vs انسان</option>
+                    <option value="ai">انسان vs هوش مصنوعی</option>
+                    <option value="ai_vs_ai">هوش مصنوعی ۱ vs هوش مصنوعی ۲</option>
+                    <option value="student_vs_student"> دانشجو vs دانشجو</option>
+                    <option value="student_vs_internal_ai"> هوش مصنوعی دانشجو vs هوش مصنوعی</option>
+                  </select>
+              </div>
+              <div class="row g-2 mb-3">
+                  <div class="col">
+                      <label for="player1Color" class="form-label">رنگ ۱:</label>
+                      <input type="color" id="player1Color" class="form-control form-control-color form-control-sm" value="#e74c3c">
+                  </div>
+                  <div class="col">
+                      <label for="player2Color" class="form-label">رنگ ۲:</label>
+                      <input type="color" id="player2Color" class="form-control form-control-color form-control-sm" value="#2980b9">
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <label for="aiDifficulty" class="form-label">سطح هوش داخلی:</label>
+                  <select id="aiDifficulty" class="form-select form-select-sm">
+                      <option value="easy">آسان</option>
+                      <option value="medium" selected>متوسط</option>
+                      <option value="hard">سخت</option>
+                  </select>
+              </div>
+              <div class="mb-3">
+                  <label for="gameSpeed" class="form-label">سرعت AI:</label>
+                  <input type="range" class="form-range" min="0.1" max="5" step="0.1" value="1" id="gameSpeed"> 
+                  <div class="text-center"><span id="gameSpeedLabel" class="badge bg-secondary">۱.۰ برابر</span></div>
+              </div>
+              <div class="mb-3">
+                <label for="numRoundsInput" class="form-label">تعداد دورها برای این سری (۱ الی ۱۰):</label>
+                <input type="number" id="numRoundsInput" class="form-control form-control-sm" value="1" min="1" max="10">
+              </div>
+          </div>
+
+          <div id="studentAIUploadContainer" style="display: none;">
+              <div id="studentAIUploadSection" class="p-3 border rounded bg-light mb-3 shadow-sm">
+                  <h5 class="text-center mb-3">تنظیمات مسابقه دانشجویان / تست هوش</h5>
+                  <div id="studentAI0InputGroup" class="mb-3">
+                      <h6 id="player1Title">تیم ۱ (قرمز)</h6>
+                      <div class="mb-2"> <label for="teamName0" class="form-label">نام تیم ۱:</label> <input type="text" class="form-control form-control-sm" id="teamName0" placeholder="نام تیم اول یا دانشجو"> </div>
+                      <div class="mb-2"> <label for="studentAIFile0" class="form-label">بارگذاری کد هوش تیم ۱ (.js):</label> <input class="form-control form-control-sm" type="file" id="studentAIFile0" accept=".js"> </div>
+                      <button id="loadAI0Btn" class="btn btn-sm btn-outline-primary mt-1">بارگذاری هوش ۱</button> <span id="ai0Status" class="ms-2 small"></span>
+                  </div>
+                  <div id="studentAI1InputGroup" class="mb-3">
+                      <h6 id="player2Title">تیم ۲ (آبی)</h6>
+                      <div class="mb-2"> <label for="teamName1" class="form-label">نام تیم ۲:</label> <input type="text" class="form-control form-control-sm" id="teamName1" placeholder="نام تیم دوم"> </div>
+                      <div class="mb-2"> <label for="studentAIFile1" class="form-label">بارگذاری کد هوش تیم ۲ (.js):</label> <input class="form-control form-control-sm" type="file" id="studentAIFile1" accept=".js"> </div>
+                      <button id="loadAI1Btn" class="btn btn-sm btn-outline-primary mt-1">بارگذاری هوش ۲</button> <span id="ai1Status" class="ms-2 small"></span>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">بستن</button>
+          <button type="button" class="btn btn-primary" id="saveSettingsBtn">ذخیره تنظیمات</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Reset Options -->
+  <div class="modal fade" id="resetOptionsModal" tabindex="-1" aria-labelledby="resetOptionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="resetOptionsModalLabel">انتخاب نوع ریست</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>کدام عمل را می‌خواهید انجام دهید؟</p>
+          <button id="confirmResetRoundBtn" class="btn btn-warning w-100 mb-2">ریست دور فعلی</button>
+          <button id="confirmNewSeriesBtn" class="btn btn-success w-100">شروع سری جدید (امتیازها صفر می‌شوند)</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">انصراف</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Move History -->
+  <div class="modal fade" id="moveHistoryModal" tabindex="-1" aria-labelledby="moveHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="moveHistoryModalLabel">تاریخچه حرکات دور فعلی</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul id="historyListDisplay" class="list-group">
+            <!-- History items will be populated here by JavaScript -->
+            <li class="list-group-item">تاریخچه‌ای برای نمایش وجود ندارد.</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">بستن</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700&display=swap');
+
+body {
+  font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+  font-size: 0.95rem;
+  /* overflow: hidden; */ /* Removed to fix position:fixed on mobile */
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  margin: 0; /* Added to ensure no default body margin interferes */
+}
+.container { 
+    width: 100%; /* عرض بیشتر برای چیدمان دو ستونی */
+    flex-grow: 1;
+    overflow-y: auto; /* Enable scroll for content if it overflows */
+    -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
+}
+
+header h1 {
+  color: #343a40;
+}
+
+.scoreboard {
+  border: none;
+  height: 200px;
+  margin-top: -3.0rem; /* Move scoreboard up slightly */
+}
+
+#gameBoardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem; 
+}
+
+#gameBoard {
+  width: 450px; /* Increased from 420px */
+  height: 450px; /* Increased from 420px */
+  background: #e9ecef;
+  border-radius: 12px; 
+  position: relative;
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.12) !important; 
+}
+
+#gameBoard svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#gameBoard circle.point-empty:hover {
+  fill: #ced4da;
+  cursor: pointer;
+}
+
+#gameBoard circle.player-piece {
+  cursor: pointer;
+  transition: transform 0.2s ease-out, stroke 0.2s ease-out;
+}
+#gameBoard circle.player-piece.selected {
+  stroke-width: 3px; 
+  stroke: #ffc107;
+  transform: scale(1.08); /* کمی بزرگتر برای تناسب با مهره بزرگتر */
+}
+#gameBoard circle.player-piece.removable:hover {
+    stroke: #dc3545; 
+    stroke-width: 3px; 
+    transform: scale(1.1); /* کمی بزرگتر */
+}
+#gameBoard circle.player-piece.in-mill-not-removable {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#gameBoard line {
+  stroke: #495057; 
+  stroke-width: 2.8px; /* <<<<< ضخامت خطوط متناسب با صفحه بزرگتر */
+}
+
+#gameBoard .glow-effect {
+  filter: url(#glow);
+}
+
+#gameBoard circle.valid-move-highlight {
+  fill: rgba(13, 202, 240, 0.25); 
+  stroke: #0dcaf0;
+  stroke-width: 2px; 
+  pointer-events: none; 
+}
+
+#gameBoard circle.last-move-highlight {
+  stroke: #ffc107; 
+  stroke-width: 3.2px; /* <<<<< ضخامت متناسب */
+  animation: pulse 0.8s ease-out;
+}
+
+@keyframes pulse { 
+  0% { transform: scale(1.05); opacity: 1; } 
+  50% { transform: scale(1.12); opacity: 0.7; } /* کمی بزرگتر برای مهره بزرگتر */
+  100% { transform: scale(1.05); opacity: 1; }
+}
+
+.history ul {
+  max-height: 180px; 
+  overflow-y: auto;
+}
+
+.form-control-color.form-control-sm { /* برای اینکه input color هم sm شود */
+  min-height: calc(1.5em + .5rem + 2px);
+  padding: .25rem .5rem;
+  font-size: .875rem;
+  height: calc(1.5em + .5rem + 2px); /* هم اندازه با سایر sm ها */
+}
+
+#studentAIUploadSection label.form-label { /* برای یکنواختی با سایر form-label ها */
+    font-size: inherit; /* یا مقدار مشخصی که با بقیه هماهنگ باشد */
+    margin-bottom: .5rem;
+}
+#studentAIUploadSection .form-control-sm { 
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+#studentAIUploadSection .btn-sm { 
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+}
+
+@media (max-width: 767px) { /* تغییر از 576px به 767px برای اعمال order-md-first */
+  .order-md-first {
+    order: -1; /* باعث می شود در موبایل تنظیمات بالا بیاید، اگر این مطلوب نیست، این بخش را حذف کنید یا order را 1 بگذارید */
+  }
+  .scoreboard {
+    border: none;
+    height: auto;
+  }
+  #gameBoard {
+    width: 88vw;  
+    height: 88vw;
+    max-width: 410px; /* Increased from 390px */ 
+    max-height: 410px; /* Increased from 390px */
+  }
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  body {
+      font-size: 0.9rem;
+  }
+  .form-select-sm, .form-control-color.form-control-sm { 
+      font-size: 0.8rem;
+      padding: 0.2rem 0.4rem;
+  }
+  label.form-label {
+      font-size: 0.85rem;
+  }
+  #gameSpeedLabel {
+      font-size: 0.75rem;
+  }
+}
+
+.form-label {
+    margin-bottom: 0.25rem;
+}
+
+.align-items-center label{
+    margin-bottom: 0;
+}
+
+#tournamentSection {
+    background-color: #f0f4f8;
+    padding: 20px;
+    border-radius: 8px;
+}
+#tournamentTeamList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em; 
+    padding: 0.5rem 0.75rem; 
+}
+#tournamentTeamList button.remove-team-btn {
+    font-size: 0.8em;
+    padding: 0.2em 0.4em;
+}
+.match-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.match-card .vs {
+    font-weight: bold;
+    margin: 0 10px;
+}
+.match-card button {
+    font-size: 0.9em;
+}
+
+.navbar {
+    margin-bottom: 1rem; 
+}
+
+.alert {
+    /* Add shadow and potentially more margin to game messages */
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* This is Bootstrap's shadow-sm */
+    margin-bottom: 1.5rem !important; /* Default is 1rem, increasing slightly */
+}
+#gameMode {
+  padding-right: 35px;
+  
+}
+#aiDifficulty {
+  padding-right: 32px;
+}
+
+#gameSpeed { /* Add temporary diagnostic style */
+  border: 2px solid red !important;
+}
+
+.piece-reserve {
+  width: 60px; /* Adjust as needed */
+  /* min-height: 450px; /* Match game board height - Will be applied for md and up */
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column; /* Default: column for desktop */
+  align-items: center;
+  gap: 8px; /* Spacing between pieces */
+  box-shadow: 0 0.2rem 0.4rem rgba(0,0,0,0.07);
+  margin-bottom: 0.5rem; /* Spacing when stacked vertically */
+}
+
+.piece-reserve svg {
+  width: 40px; /* Smaller pieces in reserve */
+  height: 40px;
+  display: block;
+}
+
+.captured-piece-display {
+  width: 60px; /* Similar to piece-reserve */
+  /* min-height: 450px; /* Match game board height - Will be applied for md and up */
+  background-color: #f8d7da; /* Light red, distinct from reserve */
+  border: 1px solid #f5c6cb; /* Reddish border */
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column; /* Default: column for desktop */
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0.2rem 0.4rem rgba(0,0,0,0.07);
+  margin-bottom: 0.5rem; /* Spacing when stacked vertically */
+}
+
+.captured-piece-display svg {
+  width: 35px; /* Slightly smaller than reserve pieces */
+  height: 35px;
+  display: block;
+  opacity: 0.7; /* Make them look captured/faded */
+}
+
+@media (min-width: 768px) { /* md breakpoint - Bootstrap's default for -md- is 768px */
+  .piece-reserve,
+  .captured-piece-display {
+    min-height: 450px; /* Re-apply for desktop view */
+    flex-direction: column; /* Ensure column for desktop */
+    width: 60px; /* Restore desktop width */
+    margin-bottom: 0; /* Remove bottom margin used for stacking */
+  }
+
+  .piece-reserve svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .captured-piece-display svg {
+    width: 35px;
+    height: 35px;
+  }
+  
+  /* Restore original side margins for desktop (from your edit) */
+  /* Note: Bootstrap classes like me-md-3, ms-md-5 could also be used in HTML for responsive margins */
+  #player0Reserve {
+    margin-right: 1rem !important; /* Corresponds to me-3 */
+    margin-left: 3rem !important;  /* Corresponds to ms-5 */
+  }
+  #player1Reserve {
+    margin-left: 1rem !important; /* Corresponds to ms-3 */
+    margin-right: 3rem !important; /* Corresponds to me-5 */
+  }
+  #player0CapturedDisplay {
+     margin-right: 0.5rem !important; /* Corresponds to me-2 */
+     margin-left: 0 !important; 
+  }
+   #player1CapturedDisplay {
+     margin-left: 0.5rem !important; /* Corresponds to ms-2 */
+     margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 767.98px) { /* xs and sm breakpoints */
+  #gameAreaWrapper {
+      gap: 1rem; /* Add some gap between stacked items */
+  }
+  .piece-reserve,
+  .captured-piece-display {
+    flex-direction: row; /* Pieces in a row on mobile */
+    flex-wrap: wrap; /* Allow pieces to wrap */
+    justify-content: center; /* Center pieces in the row */
+    align-items: center;
+    width: 80%; /* Take more width on mobile */
+    max-width: 300px; /* Max width on mobile */
+    min-height: 50px; /* Minimum height to show one row of pieces */
+    height: auto; /* Auto height based on content */
+    padding: 8px;
+    margin-left: auto !important; /* Center the box itself */
+    margin-right: auto !important; /* Center the box itself */
+  }
+
+  .piece-reserve svg,
+  .captured-piece-display svg {
+    width: 30px; /* Smaller pieces for mobile row layout */
+    height: 30px;
+  }
+
+  /* Ensure the board container also has some vertical margin when stacked */
+  #gameBoardContainer {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+  }
+}
+
+@media (min-width: 992px) { /* lg breakpoint for navbar-expand-lg */
+  .navbar-brand-centered {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Optional: ensure it doesn't overlap with toggler or nav items if they get too close */
+    /* padding-left: YOUR_TOGGLER_WIDTH_APPROX; */
+    /* padding-right: YOUR_NAV_ITEMS_WIDTH_APPROX; */
+  }
+}
